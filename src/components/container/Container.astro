@@ -1,0 +1,42 @@
+---
+const props = Astro.props;
+---
+
+<section
+  class="container"
+  style={{
+    display: props.flex ? "flex" : "block",
+    alignItems: props["items-center"] ? "center" : "initial",
+    justifyContent: props["justify-center"]
+      ? "center"
+      : props["justify-end"]
+        ? "end"
+        : props["justify-start"]
+          ? "start"
+          : props["justify-between"]
+            ? "space-between"
+            : "initial",
+    gap: "1em",
+    background: props.bg,
+  }}
+>
+  <slot />
+</section>
+<style is:global>
+  .container {
+    background: inherit;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  @media screen and (min-width: 1024px) {
+    .container {
+      max-width: 95dvw;
+    }
+  }
+  @media screen and (min-width: 1199px) {
+    .container {
+      max-width: 60dvw;
+    }
+  }
+</style>

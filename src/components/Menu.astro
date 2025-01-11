@@ -1,0 +1,63 @@
+---
+
+---
+
+<nav class="nav-links">
+  <a href="/">Inicio</a>
+  <a href="/about">Sobre mi</a>
+  <a href="/blog">Blog</a>
+  <a href="/tags/">Etiquetas</a>
+</nav>
+<script src="../scripts/menu.ts"></script>
+<style>
+  /* estilos de la barra de navegación*/
+
+  .nav-links {
+    width: 100%;
+    top: 105%;
+    left: -105%;
+    position: absolute;
+    margin: 0;
+    background: inherit;
+    padding: 1em;
+    transition: left 300ms ease-in-out;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 0;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .nav-links a:hover,
+  .nav-links a:focus {
+    text-decoration: underline;
+  }
+
+  .expanded {
+    display: flex;
+    flex-direction: column;
+    left: 0;
+  }
+  @media screen and (min-width: 636px) {
+    .nav-links {
+      width: auto;
+      display: flex;
+      position: initial;
+      top: initial;
+      left: initial;
+    }
+
+    .nav-links a {
+      display: inline-block;
+      padding: 0.25em 0.5em;
+    }
+    .expanded {
+      flex-direction: row;
+      background: transparent;
+    }
+  }
+</style>

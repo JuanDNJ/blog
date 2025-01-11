@@ -1,0 +1,13 @@
+---
+import Container from "../components/container/Container.astro";
+import Greeting from "../components/Greeting";
+import Layout from "../layouts/Layout.astro";
+const pageTitle = "Página de inicio";
+---
+
+<Layout title={pageTitle}>
+  <Container>
+    <h1>El impresionante subtítulo de mi blog</h1>
+    <Greeting client:load messages={["Hola", "Que tal", "Hola a todos"]} />
+  </Container>
+</Layout>

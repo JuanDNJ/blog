@@ -1,0 +1,32 @@
+---
+const { fill, width, height } = Astro.props;
+const maxArea = "36px";
+---
+
+<button
+  class="hamburger"
+  style={{
+    width: width ? width : maxArea,
+    height: height ? height : maxArea,
+  }}
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill={fill}>
+    <path
+      d="M120-240v-60h720v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Z"
+    ></path>
+  </svg>
+</button>
+<style is:global>
+  button.hamburger {
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+  }
+
+  @media screen and (min-width: 636px) {
+    button.hamburger {
+      display: none;
+    }
+  }
+</style>
