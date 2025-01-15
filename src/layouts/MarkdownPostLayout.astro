@@ -1,26 +1,133 @@
 ---
+import Comparative from "@/components/comparative/comparative.astro";
 import Container from "../components/container/Container.astro";
 import Layout from "./Layout.astro";
-
+import BlogPost from "@/components/BlogPost.astro";
+const allPosts = await Astro.glob(`../pages/posts/*.md`);
+const comparativas = (await Astro.glob("../pages/comparativas/*.md")) as [any];
+const siTienesUnaComparativaLaQuiero = (label: string) =>
+  comparativas.find(
+    (comparativa) => comparativa.frontmatter.comparativa.label === label
+  );
 const { frontmatter } = Astro.props;
+
+const tags = [...new Set(allPosts.map((post) => post.frontmatter.tags).flat())];
 ---
 
 <Layout title={frontmatter.title}>
-  <Container>
-    <h1>{frontmatter.title}</h1>
-    <p>Publicado el: {frontmatter.pubDate.toString().slice(0, 10)}</p>
-    <p>Escrito por {frontmatter.author}</p>
-    <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />
-    <div class="tags">
-      {
-        frontmatter.tags.map((tag: any) => (
-          <p class="tag">
-            <a href={`/tags/${tag}`}>{tag}</a>
-          </p>
-        ))
-      }
-    </div>
-    <slot />
+  <Container flex>
+    <section class="item basis-30vw">
+      <article class="article">
+        <img
+          src={frontmatter.image.url}
+          width="100%"
+          height="512px"
+          alt={frontmatter.image.alt}
+        />
+        <h1>{frontmatter.title}</h1>
+        <aside class="aside_post">
+          <strong
+            >Publicado el: {frontmatter.pubDate.toString().slice(0, 10)}</strong
+          >
+          <strong>Escrito por {frontmatter.author}</strong>
+        </aside>
+        <p>
+          {frontmatter.description}
+        </p>
+        <div class="tags">
+          {
+            frontmatter.tags.map((tag: any) => (
+              <p class="tag">
+                <a href={`/tags/${tag}`}>{tag}</a>
+              </p>
+            ))
+          }
+        </div>
+        <div>
+          {
+            frontmatter.tags.find((tag: string) => tag === "receta") && (
+              <div>
+                {frontmatter.receta.title}
+                <ul>
+                  {frontmatter.receta.ingredientes.map(
+                    (ingrediente: string) => (
+                      <li>{ingrediente}</li>
+                    )
+                  )}
+                </ul>
+                {frontmatter.receta.instrucciones.map(
+                  (instrucciones: { instruccion: string; data: [] }) => {
+                    return (
+                      <div>
+                        <h3>{instrucciones.instruccion}</h3>
+                        <ul>
+                          {instrucciones.data.map((instruccion) => (
+                            <li>{instruccion}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            )
+          }
+          <section>
+            {
+              frontmatter.video && frontmatter.video.length >= 1 && (
+                <iframe
+                  width="560"
+                  height="315"
+                  src={frontmatter.video}
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allowfullscreen
+                />
+              )
+            }
+          </section>
+          <section>
+            {
+              siTienesUnaComparativaLaQuiero(frontmatter.comparativa) && (
+                <Comparative
+                  frontmatter={
+                    siTienesUnaComparativaLaQuiero(frontmatter.comparativa)
+                      .frontmatter
+                  }
+                />
+              )
+            }
+          </section>
+        </div>
+        <slot />
+      </article>
+    </section>
+    <aside class="sticky">
+      <article>
+        <h3>Posts recientes</h3>
+        <ul>
+          {
+            allPosts.map((post) => (
+              <BlogPost url={post.url} title={post.frontmatter.title} />
+            ))
+          }
+        </ul>
+      </article>
+      <article>
+        <h3>Tags</h3>
+        <div class="tags">
+          {
+            tags.map((tag) => (
+              <p class="tag">
+                <a href={`/tags/${tag}`}>{tag}</a>
+              </p>
+            ))
+          }
+        </div>
+      </article>
+    </aside>
   </Container>
 </Layout>
 <style>
@@ -40,5 +147,55 @@ const { frontmatter } = Astro.props;
     padding: 0.5em 1em;
     font-size: 1.15em;
     background-color: #f8fcfd;
+  }
+  .aside_post {
+    display: flex;
+    justify-content: space-between;
+  }
+  .item {
+    flex-grow: 2;
+  }
+  .basis-10vw {
+    flex-basis: 10vw;
+  }
+  .basis-20vw {
+    flex-basis: 20vw;
+  }
+  .basis-30vw {
+    flex-basis: 30vw;
+  }
+  .basis-40vw {
+    flex-basis: 40vw;
+  }
+  .basis-50vw {
+    flex-basis: 50vw;
+  }
+  .basis-60vw {
+    flex-basis: 60vw;
+  }
+  .sticky {
+    position: sticky;
+    top: 65px;
+    bottom: 0;
+    height: 100%;
+    flex-basis: 258px;
+    padding-top: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    & ul,
+    h3 {
+      padding: 0;
+      margin: 0;
+    }
+    & ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15em;
+    }
+  }
+  .article {
+    display: grid;
   }
 </style>
