@@ -1,0 +1,55 @@
+---
+const { frontmatter } = Astro.props;
+const { title, slug, batidoras, conclusion, comparativa, tag } = frontmatter;
+---
+
+<!-- {JSON.stringify({ title, slug, batidoras, conclusion, comparativa, tag })} -->
+
+<section>
+  <h2>{title}</h2>
+  <article>
+    {
+      batidoras.map((batidora: { marca: string; modelos: [] }) => (
+        <div>
+          <h3>{batidora.marca}</h3>
+          <ul>
+            { batidora.modelos.map((modelo:any) => 
+          <li>{modelo.name}</li>
+            <ul>
+              {modelo.data.map((item:string) =>  <li>{item}</li>)}
+            </ul>
+          )}
+          </ul>
+        </div>
+      ))
+    }
+  </article>
+  <article>
+    <table>
+      <thead>
+        <tr>
+          <td>Marca</td>
+          <td>Modelo Pedestal</td>
+          <td>Modelo Orbital</td>
+          <td>Potencia</td>
+          <td>Capacidad</td>
+          <td>Precio</td>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          comparativa.data.map((comparativa: any) => (
+            <tr>
+              <td>{comparativa.marca}</td>
+              <td>{comparativa.modelo_pedestal}</td>
+              <td>{comparativa.modelo_orbital}</td>
+              <td>{comparativa.potencia}</td>
+              <td>{comparativa.capacidad}</td>
+              <td>{comparativa.precio}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </article>
+</section>
